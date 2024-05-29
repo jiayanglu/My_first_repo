@@ -1,17 +1,19 @@
 ---
 title: "R objects, Workflow, and Functions"
-format: html
+format: pdf
 editor: visual
 ---
 
 # Vectors
-Create a vector
+
+Create a vector!
 
 ```{r}
 set.seed(42)
 my_unif <- runif(30)
 is.vector(my_unif)
 ```
+
 Sebset that object
 
 ```{r}
@@ -24,12 +26,14 @@ Sort the vector
 ```{r}
 sort(my_unif)
 ```
+
 Create a vector with strings in it.(number first, lower case then, last upper case)
 
 ```{r}
 char_vec <- c('daf', "adf", "E2", '13da')
 sort(char_vec)
 ```
+
 # Data Frame
 
 ```{r}
@@ -37,11 +41,13 @@ data(trees)
 trees
 str(trees)
 ```
+
 Subset a column
 
 ```{r}
 trees$Height
 ```
+
 Get attributes from the data frame
 
 ```{r}
@@ -49,6 +55,7 @@ attributes(trees)
 names(trees)
 colnames(trees)[2:3]
 ```
+
 # Lists
 
 Inevestigating data frame from before
@@ -57,12 +64,14 @@ Inevestigating data frame from before
 is.list(trees)
 is.data.frame(trees)
 ```
+
 Can subset as a list
 
 ```{r}
 trees[1:2]
 trees[[2]]
 ```
+
 Look at linear model fit
 
 ```{r}
@@ -74,12 +83,123 @@ Look at structure but restrict info (1st level of structure):
 ```{r}
 str(fit, max.level = 1)
 ```
-Some helper functions exist 
+
+Some helper functions exist
 
 ```{r}
 fit$coefficients
 coef(fit)
 fit$residuals
 residuals(fit)
+```
+
+# if/then/else
+
+Fizz buzz challenge
+
+- take in a number
+- if it is divisible by 3 return fizz
+- if it is divisible by 5 return buzz
+- if it is divisible by 15 return fizz buzz
+```{r}
+number <- 15
+if ((number %% 15) == 0) {
+  print ("fizz buzz")
+} else if ((number %% 5) == 0) {
+  print ("buzz")
+} else if ((number %% 3) == 0) {
+  print ("fizz")
+} else {
+  print ("whoops?")
+}
+#if (!(number %% 15))
+```
+
+# Loops
+
+Wrap the fizz buzz code into a loop to check for multiple values.
+
+```{r}
+for (number in -1:41){
+  if ((number %% 15) == 0) {
+    print ("fizz buzz")
+  } else if ((number %% 5) == 0) {
+    print ("buzz")
+  } else if ((number %% 3) == 0) {
+    print ("fizz")
+  } else {
+    print ("whoops?")
+  }
+}
+
+```
+
+# Writing R Functions
+
+Normal (continuous) Approximation to the binomial (discrete).
+
+```{r}
+n <- 40
+prob <- 0.3
+#probabilities from a binomial RV
+dbinom(0:n, size = n, prob = prob)
+#plot with plot
+plot(0:n, 
+     dbinom(0:n, size = n, prob = prob),
+     type = "h"
+)
+norm_x <- seq(from = 0, to = n, length = 1000)
+lines(norm_x,
+      dnorm(norm_x, mean = n*prob, sd = sqrt(n*prob*(1-prob))))
+```
+
+Let's write a function to make this plot for any $n$ and $p$ we give it.
+
+```{r}
+plot_norm_approx <- function (n, prob) {
+  #plot with plot
+  plot(0:n, 
+       dbinom(0:n, size = n, prob = prob),
+       type = "h"
+  )
+  norm_x <- seq(from = 0, to = n, length = 1000)
+  lines(norm_x,
+        dnorm(norm_x, mean = n*prob, sd = sqrt(n*prob*(1-prob))))
+}
+```
+
+
+Test it.
+
+```{r}
+plot_norm_approx(30, 0.95)
+```
+
+Add some default values.
+
+```{r}
+plot_norm_approx <- function (n = 30, prob = 0.5) {
+  #plot with plot
+  plot(0:n, 
+       dbinom(0:n, size = n, prob = prob),
+       type = "h"
+  )
+  norm_x <- seq(from = 0, to = n, length = 1000)
+  lines(norm_x,
+        dnorm(norm_x, mean = n*prob, sd = sqrt(n*prob*(1-prob))))
+}
+```
+
+Test it.
+
+```{r}
+#default
+plot_norm_approx()
+#change n to be 50
+plot_norm_approx(50)
+#change prob to be 0.1
+plot_norm_approx(prob = 0.1)
+#call things positionaly or call them by name
+plot_norm_approx(prob = 0.1, 50)
 ```
 
