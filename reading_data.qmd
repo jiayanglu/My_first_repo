@@ -1,0 +1,30 @@
+---
+title: "Reading Data"
+format: html
+editor: visual
+---
+
+## Reading a 'csv' File
+
+```{r}
+library(readr)
+air_quality_data <-
+  read_csv("https://www4.stat.ncsu.edu/~online/datasets/AirQuality.csv")
+air_quality_data
+air_quality_data$'CO(GT)'[1:10]
+```
+
+## Reading in a Fixed width Field (FWF) file
+
+```{r}
+cigarettes_data <- read_fwf("https://www4.stat.ncsu.edu/~online/datasets/cigarettes.txt",
+         fwf_widths(c(17, 5, 9, 7, 4),
+                    c("brand", "tar", "nicotine", "weight", "co")),
+         skip = 1)
+#Alpine           14.1 0.86     0.9853 13.6
+#1-17, 18-22, 23-31, 32-38, 29-42
+#17, 5, 9, 4
+
+```
+
+
